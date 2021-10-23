@@ -43,10 +43,13 @@ abstract class DuskTestCase extends BaseTestCase
                 $url = $driver->getCurrentURL();
             }
 
-            $strCoordenadas = substr($url, strpos($url, "@")+1, strlen($url));
-            $strCoordenadas = substr($strCoordenadas, 0, strpos($strCoordenadas, "z"));
+            $coords = explode("@", $url)[1];
+            $coords = explode("/", $coords)[0];
+            $coords = array_filter(explode(",", $coords), function($coord){
+                if(is_numeric($coord)) return $coord;
+            });
 
-            list($latitude, $longitude) = explode(",", $strCoordenadas);
+            list($latitude, $longitude) = $coords;
 
             $dadosConcatenados = "{$entidade['ejfid']}, {$entidade['enjdsc']}, {$entidade['endid']}, {$entidade['endereco']}, {$latitude}, {$longitude}";
 
